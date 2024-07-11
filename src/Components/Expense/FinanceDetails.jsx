@@ -194,7 +194,8 @@ const FinanceDetails = () => {
           title="Expenses"
           day="this week"
           position="left"
-          dayArray={thisWeekExpenseData}
+          // dayArray={thisWeekExpenseData}
+          dayArray={expenseData}
           // categoryArray={expenseCategory}
         />
         <FinanceCard
