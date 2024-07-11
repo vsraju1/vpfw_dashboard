@@ -1,0 +1,64 @@
+*{
+    padding: 0;
+    margin: 0;  
+}
+.finance{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: fit-content;
+    min-height: 15vh;
+    gap: 20px;
+}
+form{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border-radius: 50px;
+    box-shadow: 0px 0px 10px lightgray;
+    width: 60%;
+}
+form input, select, button{
+    width: 100%;
+    padding: 5px 5px;
+    border: 1px solid lightgray;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    color: gray;
+}
+form button{
+    width: 6vw;
+    background-color: #4681f4;
+    color: white;
+    border: none;
+}
+
+@media (max-width: 820px) {
+    form {
+        width: 95vw;
+    }
+    form input, select, button{        
+        font-size: 1rem;
+        padding: 6px 6px;
+    }
+}
+
+@media (max-width: 600px){
+    
+    form{
+        width: 90vw;
+        flex-direction: column;
+        border-radius: 5px;
+    }
+    form input, select, button{        
+        flex: 1;
+        width: 80vw;
+        padding: 8px 6px;
+    }
+    form button{
+        width: 80vw;
+    }
+}

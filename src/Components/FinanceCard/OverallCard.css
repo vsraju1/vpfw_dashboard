@@ -1,0 +1,20 @@
+.finance_details .overAllFinance{
+    margin-top: 20px;
+    width: 40vw;
+    min-height: 10vh;
+    box-shadow: 0px 0px 10px lightgray;
+    padding: 15px 25px;
+    /* justify-content: flex-start; */
+}
+.overAllFinance .title{
+    margin-bottom: 5px;
+    text-decoration: underline;
+}
+.overAllFinance .overAllContainer{
+    /* background-color: red; */
+    width: 100%;
+}
+.overAllContainer .overAllItem{
+    display: flex;
+    justify-content: space-between;
+}
