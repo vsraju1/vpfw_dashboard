@@ -1,6 +1,6 @@
 import React from 'react'
 import './Homepage.css'
-import Card from '../../Components/Card/Card'
+import Card from '../../Components/DashboardCard/DashboardCard.jsx'
 
 const data = {
     title: 'expenses',

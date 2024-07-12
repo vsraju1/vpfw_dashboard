@@ -3,18 +3,17 @@ import "./FinanceDetails.css";
 import FinanceContext from "../../Context/FinanceContext";
 import OverallCard from "../OverallCard/OverallCard";
 
-const FinanceCard = ({ title, day, position, dayArray }) => {
+const FinanceCard = ({ day, incomeData, expenseData }) => {
   const today = new Date();
-  const dataOfTodayOrWeekOrMonth = () => {
+  const dataOfTodayOrWeekOrMonth = (arr) => {
     if (day == "this month") {
       const startingDayOfThisMonth = new Date(
         today.getFullYear(),
         today.getMonth(),
         1
       );
-      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+      const filteredDayOrWeekOrMonthData = arr.filter((item) => {
         const transactionDate = new Date(item.date);
-        console.log(transactionDate);
         return (
           transactionDate >= startingDayOfThisMonth && transactionDate <= today
         );
@@ -24,7 +23,7 @@ const FinanceCard = ({ title, day, position, dayArray }) => {
       const dayOfWeek = today.getDay();
       const startingDayOfThisWeek = new Date();
       startingDayOfThisWeek.setDate(today.getDate() - dayOfWeek);
-      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+      const filteredDayOrWeekOrMonthData = arr.filter((item) => {
         const transactionDate = new Date(item.date);
         return (
           transactionDate >= startingDayOfThisWeek && transactionDate <= today
@@ -32,25 +31,29 @@ const FinanceCard = ({ title, day, position, dayArray }) => {
       });
       return filteredDayOrWeekOrMonthData;
     } else if (day == "today") {
-      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+      const filteredDayOrWeekOrMonthData = arr.filter((item) => {
         const itemDate = new Date(item.date);
         itemDate.setHours(0, 0, 0, 0);
         today.setHours(0, 0, 0, 0);
-        console.log(
-          itemDate.getTime(),
-          today.getTime(),
-          "this from today array"
-        );
         return itemDate.getTime() === today.getTime();
       });
       return filteredDayOrWeekOrMonthData;
     }
   };
 
-  const filteredDayOrWeekOrMonthData = dataOfTodayOrWeekOrMonth();
+  const filteredIncomeData = dataOfTodayOrWeekOrMonth(incomeData);
+  const filteredExpenseData = dataOfTodayOrWeekOrMonth(expenseData);
 
-  // Totaling amount from dayarray(income or expense) data
-  const totalAmount = filteredDayOrWeekOrMonthData?.reduce(
+  // Totaling amount from income filtered data
+  const totalIncomeAmount = filteredIncomeData?.reduce(
+    (totalAmount, currentObject) => {
+      return totalAmount + currentObject.amount;
+    },
+    0
+  );
+
+  // Totaling amount from expense filtered data
+  const totalExpenseAmount = filteredExpenseData?.reduce(
     (totalAmount, currentObject) => {
       return totalAmount + currentObject.amount;
     },
@@ -79,116 +82,144 @@ const FinanceCard = ({ title, day, position, dayArray }) => {
     const finalArray = mergedAmounts(fnArray);
     return finalArray;
   };
-  const array_details = categoryFn(filteredDayOrWeekOrMonthData);
 
-  // totalling amount
-  const dayarrayTotal = array_details.reduce((totalAmount, currentObject) => {
-    return totalAmount + currentObject.amount;
-  }, 0);
+  const income_details = categoryFn(filteredIncomeData);
+
+  const expense_details = categoryFn(filteredExpenseData);
+
+  const convetToINR = (num) => {
+    const numToINRCurrency = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+    });
+    let formattedInCurrency;
+    return (formattedInCurrency = numToINRCurrency.format(num));
+  };
 
   return (
     <>
-      <div className={position}>
-        <div className="finance_title">
-          <h3>
-            {title}({day})
-          </h3>
+      <div className="finance_card">
+        <div className={`financeCard_item`}>
+          <div className="finance_title">
+            <h3>Expense({day})</h3>
+          </div>
+          {expense_details?.map((item, index) => (
+            <div key={index} className="finance_text">
+              <div>
+                <b>{item.categoryValue}: </b>
+              </div>
+              <div>
+                <p style={{ fontSize: "1.2rem", color: "red" }}>
+                  {convetToINR(item.amount)}
+                </p>
+              </div>
+            </div>
+          ))}
+          <div className="finance_text">
+            <div>
+              <b>total: </b>
+            </div>
+            <div>
+              <p style={{ fontSize: "1.2rem", color: "red" }}>
+                {totalExpenseAmount ? convetToINR(totalExpenseAmount) : 0}
+              </p>
+            </div>
+          </div>
         </div>
-        {console.log(array_details, day, `this is ${day} details`)}
-        {array_details?.map((item, index) => (
-          <div key={index} className="finance_text">
+        <div className={`financeCard_item`}>
+          <div className="finance_title">
+            <h3>Income({day})</h3>
+          </div>
+          {income_details?.map((item, index) => (
+            <div key={index} className="finance_text">
+              <div>
+                <b>{item.categoryValue}: </b>
+              </div>
+              <div>
+                <p style={{ fontSize: "1.2rem", color: "green" }}>
+                  {convetToINR(item.amount)}
+                </p>
+              </div>
+            </div>
+          ))}
+          <div className="finance_text">
             <div>
-              <b>{item.categoryValue}: </b>
+              <b style={{ color: "green" }}>total: </b>
             </div>
             <div>
-              <p style={{ fontSize: "1.2rem" }}>{item.amount}</p>
+              <p style={{ fontSize: "1.2rem", color: "green" }}>
+                {totalExpenseAmount ? convetToINR(totalIncomeAmount) : 0}
+              </p>
             </div>
-          </div>
-        ))}
-        <div className="finance_text">
-          <div>
-            <b>total: </b>
-          </div>
-          <div>
-            <p style={{ fontSize: "1.2rem" }}>
-              {totalAmount ? totalAmount : 0}
-            </p>
           </div>
         </div>
       </div>
+      <OverallCard
+        day={day}
+        incomeTotal={totalIncomeAmount}
+        expenseTotal={totalExpenseAmount}
+      />
     </>
   );
 };
 
 const FinanceDetails = () => {
-  const [amount, setAmount] = useState(0);
   // Getting data from global state
   const data = useContext(FinanceContext);
 
-  // Setting today's data
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); //set time to midnight
-
-  // creating new array of expense data from today's data
-  const expenseData = data.finance.filter((item) => item.type === "expense");
-  // Totaling amount from expense data
-  const expenseTotal = expenseData.reduce((totalAmount, currentObject) => {
-    return totalAmount + currentObject.amount;
-  }, 0);
-
-  // Creating new array of income data from today's data
+  // creating new array of income data from transactions data
   const incomeData = data.finance.filter((item) => item.type === "income");
 
-  // Totaling amount from income data
+  // Total amount of income data
   const incomeTotal = incomeData.reduce((totalAmount, currentObject) => {
     return totalAmount + currentObject.amount;
   }, 0);
 
+  // creating new array of expense data from transactions data
+  const expenseData = data.finance.filter((item) => item.type === "expense");
+
+  // Total amount of expense data
+  const expenseTotal = expenseData.reduce((totalAmount, currentObject) => {
+    return totalAmount + currentObject.amount;
+  }, 0);
+
+  // Formatting parameter num to INR currency
+  const convetToINR = (num) => {
+    const numToINRCurrency = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      minimumFractionDigits: 0,
+    });
+    let formattedInCurrency;
+    return (formattedInCurrency = numToINRCurrency.format(num));
+  };
+
   return (
     <div className="finance_details">
+      <h2 style={{color: `${incomeTotal - expenseTotal >= 0 ? 'green' : 'red'}`, fontWeight: "600", fontSize: "2rem", marginTop: "20px"}}>Balance: {convetToINR(incomeTotal - expenseTotal)}</h2>
       <div className="day">
-        {console.log(data.finance)}
         <FinanceCard
           title="Expenses"
           day="today"
-          position="left"
-          dayArray={expenseData}
-        />
-        <FinanceCard
-          title="Income"
-          day="today"
-          position="right"
-          dayArray={incomeData}
+          incomeData={incomeData}
+          expenseData={expenseData}
         />
       </div>
-      {/* <OverallCard incomeTotal={incomeTotal} expenseTotal={expenseTotal} /> */}
       <div className="day">
         <FinanceCard
           title="Expenses"
           day="this week"
-          position="left"
-          dayArray={expenseData}
-        />
-        <FinanceCard
-          title="Income"
-          day="this week"
-          position="right"
-          dayArray={incomeData}
+          incomeData={incomeData}
+          expenseData={expenseData}
         />
       </div>
-      <div>this</div>
       <div className="day">
         <FinanceCard
           title="Expenses"
           day="this month"
-          position="left"
-          dayArray={expenseData}
-        />
-        <FinanceCard
-          title="Income"
-          day="this month"
-          position="right"
-          dayArray={incomeData}
+          incomeData={incomeData}
+          expenseData={expenseData}
         />
       </div>
     </div>
