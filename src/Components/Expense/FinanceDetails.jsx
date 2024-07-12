@@ -1,25 +1,61 @@
 import React, { useContext, useState } from "react";
 import "./FinanceDetails.css";
 import FinanceContext from "../../Context/FinanceContext";
-import OverallCard from "../FinanceCard/OverallCard";
-
-// const expenseCategory = [
-//   "material",
-//   "salary",
-//   "paint",
-//   "general expenses",
-//   "intrest",
-//   "repayment",
-//   "advance return",
-// ];
-
-// const incomeCategory = ["advance", "completion", "borrowed"];
+import OverallCard from "../OverallCard/OverallCard";
 
 const FinanceCard = ({ title, day, position, dayArray }) => {
+  const today = new Date();
+  const dataOfTodayOrWeekOrMonth = () => {
+    if (day == "this month") {
+      const startingDayOfThisMonth = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+        const transactionDate = new Date(item.date);
+        console.log(transactionDate);
+        return (
+          transactionDate >= startingDayOfThisMonth && transactionDate <= today
+        );
+      });
+      return filteredDayOrWeekOrMonthData;
+    } else if (day == "this week") {
+      const dayOfWeek = today.getDay();
+      const startingDayOfThisWeek = new Date();
+      startingDayOfThisWeek.setDate(today.getDate() - dayOfWeek);
+      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+        const transactionDate = new Date(item.date);
+        return (
+          transactionDate >= startingDayOfThisWeek && transactionDate <= today
+        );
+      });
+      return filteredDayOrWeekOrMonthData;
+    } else if (day == "today") {
+      const filteredDayOrWeekOrMonthData = dayArray.filter((item) => {
+        const itemDate = new Date(item.date);
+        itemDate.setHours(0, 0, 0, 0);
+        today.setHours(0, 0, 0, 0);
+        console.log(
+          itemDate.getTime(),
+          today.getTime(),
+          "this from today array"
+        );
+        return itemDate.getTime() === today.getTime();
+      });
+      return filteredDayOrWeekOrMonthData;
+    }
+  };
+
+  const filteredDayOrWeekOrMonthData = dataOfTodayOrWeekOrMonth();
+
   // Totaling amount from dayarray(income or expense) data
-  const totalAmount = dayArray?.reduce((totalAmount, currentObject) => {
-    return totalAmount + currentObject.amount;
-  }, 0);
+  const totalAmount = filteredDayOrWeekOrMonthData?.reduce(
+    (totalAmount, currentObject) => {
+      return totalAmount + currentObject.amount;
+    },
+    0
+  );
 
   const categoryFn = (arr) => {
     const fnArray = arr?.map((obj) => {
@@ -42,41 +78,13 @@ const FinanceCard = ({ title, day, position, dayArray }) => {
     };
     const finalArray = mergedAmounts(fnArray);
     return finalArray;
-    // return fnArray;
   };
-  // categoryFn(title, dayArray)
-  const array_details = categoryFn(dayArray);
+  const array_details = categoryFn(filteredDayOrWeekOrMonthData);
 
-  const today = new Date()
-  const dataOfTodayOrWeekOrMonth = () => {
-    if(day == 'this month'){
-      // const dayOfWeek = today.getDay()
-      const startingDayOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 2)
-      // startingDayOfThisWeek.setDate(today.getDate() - dayOfWeek)
-      const filteredDayOrWeekOrMonthData = array_details.filter(item => {
-        const transactionDate = new Date(item.date)
-        return transactionDate >= startingDayOfThisMonth && transactionDate <= today
-      })
-      return filteredDayOrWeekOrMonthData;
-    }
-    else if(day == 'this week'){
-      const dayOfWeek = today.getDay()
-      // const startingDayOfThisMonth = new Date(today.getFullYear(), today.getMonth(), 2)
-      const startingDayOfThisWeek = new Date()
-      startingDayOfThisWeek.setDate(today.getDate() - dayOfWeek)
-      const filteredDayOrWeekOrMonthData = array_details.filter(item => {
-        const transactionDate = new Date(item.date)
-        return transactionDate >= startingDayOfThisWeek && transactionDate <= today
-      })
-      return filteredDayOrWeekOrMonthData;
-    }
-    else {
-      let filteredDayOrWeekOrMonthData;
-      return filteredDayOrWeekOrMonthData = array_details
-    }
-  }
-
-  const filteredDayOrWeekOrMonthData = dataOfTodayOrWeekOrMonth()
+  // totalling amount
+  const dayarrayTotal = array_details.reduce((totalAmount, currentObject) => {
+    return totalAmount + currentObject.amount;
+  }, 0);
 
   return (
     <>
@@ -86,8 +94,8 @@ const FinanceCard = ({ title, day, position, dayArray }) => {
             {title}({day})
           </h3>
         </div>
-        {console.log(array_details, "this is array details")}
-        {filteredDayOrWeekOrMonthData?.map((item, index) => (
+        {console.log(array_details, day, `this is ${day} details`)}
+        {array_details?.map((item, index) => (
           <div key={index} className="finance_text">
             <div>
               <b>{item.categoryValue}: </b>
@@ -121,89 +129,51 @@ const FinanceDetails = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0); //set time to midnight
 
-  // Filtering data of today's date
-  const filteredData = data.finance.filter((item) => {
-    const itemDate = new Date(item.date);
-    itemDate.setHours(0, 0, 0, 0);
-    return itemDate.getTime() === today.getTime();
-  });
-
   // creating new array of expense data from today's data
-  const expenseData = filteredData.filter((item) => item.type === "expense");
+  const expenseData = data.finance.filter((item) => item.type === "expense");
   // Totaling amount from expense data
   const expenseTotal = expenseData.reduce((totalAmount, currentObject) => {
     return totalAmount + currentObject.amount;
   }, 0);
 
   // Creating new array of income data from today's data
-  const incomeData = filteredData.filter((item) => item.type === "income");
+  const incomeData = data.finance.filter((item) => item.type === "income");
 
   // Totaling amount from income data
   const incomeTotal = incomeData.reduce((totalAmount, currentObject) => {
     return totalAmount + currentObject.amount;
   }, 0);
 
-  // Creating an array of the passt 7 days
-  const past7Days = [...Array(7).keys()].map((index) => {
-    const date = new Date(today);
-    date.setDate(date.getDate() - index);
-    return date.toISOString().split("T")[0];
-  });
-
-  // // Filter data for the past 7 days
-  const thisWeekData = data.finance.filter((item) => {
-    const itemDate = item.date;
-    return past7Days.includes(itemDate);
-  });
-
-  // Creating this week's expense data array
-  const thisWeekExpenseData = thisWeekData.filter(
-    (item) => item.type == "expense"
-  );
-
-  // Creating this week's income data array
-  const thisWeekIncomeData = thisWeekData.filter(
-    (item) => item.type == "income"
-  );
-
-  // if(day == 'this week') {
-
-  // }
-
   return (
     <div className="finance_details">
       <div className="day">
+        {console.log(data.finance)}
         <FinanceCard
           title="Expenses"
           day="today"
           position="left"
           dayArray={expenseData}
-          // categoryArray={expenseCategory}
         />
         <FinanceCard
           title="Income"
           day="today"
           position="right"
           dayArray={incomeData}
-          // categoryArray={incomeCategory}
         />
       </div>
-      <OverallCard incomeTotal={incomeTotal} expenseTotal={expenseTotal} />
+      {/* <OverallCard incomeTotal={incomeTotal} expenseTotal={expenseTotal} /> */}
       <div className="day">
         <FinanceCard
           title="Expenses"
           day="this week"
           position="left"
-          // dayArray={thisWeekExpenseData}
           dayArray={expenseData}
-          // categoryArray={expenseCategory}
         />
         <FinanceCard
           title="Income"
           day="this week"
           position="right"
-          dayArray={thisWeekIncomeData}
-          // categoryArray={incomeCategory}
+          dayArray={incomeData}
         />
       </div>
       <div>this</div>
@@ -212,13 +182,13 @@ const FinanceDetails = () => {
           title="Expenses"
           day="this month"
           position="left"
-          // categoryArray={expenseCategory}
+          dayArray={expenseData}
         />
         <FinanceCard
           title="Income"
           day="this month"
           position="right"
-          // categoryArray={incomeCategory}
+          dayArray={incomeData}
         />
       </div>
     </div>

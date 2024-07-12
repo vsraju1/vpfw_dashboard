@@ -37,7 +37,7 @@ const Finance = () => {
       id: Number(`${date.getDate()}${date.getMonth()}${date.getFullYear()}`),
       name: name,
       type: type,
-      categoryValue: categoryValue,
+      categoryValue: categoryValue.toLowerCase(),
       amount: Number(amount),
       date: todayDate
     };
