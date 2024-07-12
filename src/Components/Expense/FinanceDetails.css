@@ -1,10 +1,39 @@
+.financeContainer{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    gap: 10px;
+    flex-direction: column;
+}
+.finance_details h2{
+    text-transform: capitalize;
+    text-align: center;
+    text-decoration: underline;
+    margin-top: 20px;
+}
+.finance_details{
+    width: 100%;
+    min-height: 85vh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.finance_details .cardTitle{
+    padding: 10px;
+    border: 1px solid black;
+}
 .finance_card{
+    /* background-color: cadetblue; */
     width: 100%;
     padding: 20px;
     /* background-color: red; */
     display: flex;
     gap: 20px;
-    justify-content: space-around;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex: 0.8;
 }
 
 .finance_card .financeCard_item{
@@ -17,14 +46,7 @@
 
 }
 
-.finance_details{
-    width: 80vw;
-    min-height: 85vh;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+
 .finance_details .day{
     width: 100%;
     display: flex;
@@ -73,5 +95,37 @@
     font-weight: 600;
     color: green;
     justify-self: end;
+}
+
+
+@media(max-width: 820px){
+    .financeContainer{
+        width: 96vw;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+
+@media(max-width: 600px){
+    .financeContainer{
+        width: 96vw;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .finance_card{
+        width: 100%;
+        padding: 20px;
+        /* background-color: red; */
+        display: flex;
+        gap: 20px;
+        justify-content: space-around;
+        flex-direction: column-reverse;
+    }
+    .finance_card .financeCard_item{
+        width: 100%;
+    }
 }
 

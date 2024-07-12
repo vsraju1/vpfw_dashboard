@@ -98,7 +98,8 @@ const FinanceCard = ({ day, incomeData, expenseData }) => {
   };
 
   return (
-    <>
+    <div className="financeContainer">
+        <h2>{day}</h2>
       <div className="finance_card">
         <div className={`financeCard_item`}>
           <div className="finance_title">
@@ -154,13 +155,14 @@ const FinanceCard = ({ day, incomeData, expenseData }) => {
             </div>
           </div>
         </div>
-      </div>
-      <OverallCard
+        <OverallCard
         day={day}
         incomeTotal={totalIncomeAmount}
         expenseTotal={totalExpenseAmount}
       />
-    </>
+      </div>
+     
+    </div>
   );
 };
 
@@ -197,7 +199,7 @@ const FinanceDetails = () => {
 
   return (
     <div className="finance_details">
-      <h2 style={{color: `${incomeTotal - expenseTotal >= 0 ? 'green' : 'red'}`, fontWeight: "600", fontSize: "2rem", marginTop: "20px"}}>Balance: {convetToINR(incomeTotal - expenseTotal)}</h2>
+      <h2 className="cardTitle" style={{color: `${incomeTotal - expenseTotal >= 0 ? 'green' : 'red'}`, fontWeight: "600", fontSize: "2rem", marginTop: "20px", marginBottom: "20px", textDecoration: "none"}}>Balance: {convetToINR(incomeTotal - expenseTotal)}</h2>
       <div className="day">
         <FinanceCard
           title="Expenses"

@@ -1,4 +1,4 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import "./Finance.css";
 import FinanceContext from "../../Context/FinanceContext";
 
@@ -13,6 +13,7 @@ const typeData = [
       "Repayment",
       "Advance Return",
       "General Expences",
+      "Home Expences"
     ],
   },
   {
@@ -21,35 +22,32 @@ const typeData = [
   },
 ];
 
-
 const Finance = () => {
-  const {finance, setFinance} = useContext(FinanceContext);
+  const { finance, setFinance } = useContext(FinanceContext);
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("");
   const [category, setCategory] = useState([]);
-  const [categoryValue, setCategoryValue] = useState("")
+  const [categoryValue, setCategoryValue] = useState("");
   const [name, setName] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     const date = new Date();
-    const todayDate = date.toISOString().split("T")[0]
+    const todayDate = date.toISOString().split("T")[0];
     let data = {
       id: Number(`${date.getDate()}${date.getMonth()}${date.getFullYear()}`),
       name: name,
       type: type,
       categoryValue: categoryValue.toLowerCase(),
       amount: Number(amount),
-      date: todayDate
+      date: todayDate,
     };
     setFinance((prev) => [...prev, data]);
     setAmount("");
-    setType("")
-    setCategory([])
-    setCategoryValue("")
-    setName("")
+    setType("");
+    setCategory([]);
+    setCategoryValue("");
+    setName("");
   };
-
-  let isFilled = !amount && !type && !category && !name;
 
   return (
     <div className="finance">
@@ -71,15 +69,21 @@ const Finance = () => {
             value={type}
             required
             onChange={(e) => {
-              const selectedType = e.target.value
-              setType(selectedType)
-              const categoryData = typeData.find(item => item.type === selectedType)
-              setCategory(categoryData ? categoryData.categories : [])
+              const selectedType = e.target.value;
+              setType(selectedType);
+              const categoryData = typeData.find(
+                (item) => item.type === selectedType
+              );
+              setCategory(categoryData ? categoryData.categories : []);
             }}
           >
             <option>Type</option>
             {typeData.map((item, index) => {
-              return <option key={index} value={item.type}>{item.type}</option>;
+              return (
+                <option key={index} value={item.type}>
+                  {item.type}
+                </option>
+              );
             })}
           </select>
         </label>
@@ -87,14 +91,18 @@ const Finance = () => {
           <select
             disabled={!category}
             value={categoryValue}
-            onChange={e => {
-              setCategoryValue(e.target.value)
+            onChange={(e) => {
+              setCategoryValue(e.target.value);
             }}
             required
           >
-            <option value="" disabled>Category</option>
+            <option value="" disabled>
+              Category
+            </option>
             {category.map((item, index) => (
-              <option value={item} key={index}>{item}</option>
+              <option value={item} key={index}>
+                {item}
+              </option>
             ))}
           </select>
         </label>
