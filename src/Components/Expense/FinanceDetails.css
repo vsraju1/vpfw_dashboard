@@ -24,6 +24,9 @@
     padding: 10px;
     border: 1px solid black;
 }
+.finance_details a{
+    text-decoration: none;
+}
 .finance_card{
     /* background-color: cadetblue; */
     width: 100%;

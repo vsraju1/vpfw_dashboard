@@ -8,7 +8,7 @@ const Card = ({data, color, classNam}) => {
   return (
     <div className={`card ${classNam}`}>
       <div className="card_title">
-        <h2>{data.title}</h2> 
+        <h2>{data.title}</h2>
       </div>
       <div className="card_text">
         <div className='text_item'><span>{keys[1]}</span> <span style={{color: color}}>₹{data.today}</span></div>

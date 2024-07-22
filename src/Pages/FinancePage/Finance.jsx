@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import app from "../../firebaseConfig";
+import { getDatabase, ref, set, push } from "firebase/database";
 import "./Finance.css";
 import FinanceContext from "../../Context/FinanceContext";
 
@@ -13,12 +15,12 @@ const typeData = [
       "Repayment",
       "Advance Return",
       "General Expences",
-      "Home Expences"
+      "Home Expences",
     ],
   },
   {
     type: "income",
-    categories: ["Advance", "Completion", "Borrowed"],
+    categories: ["Advance", "Completion", "Small Work", "Borrowed"],
   },
 ];
 
@@ -29,19 +31,35 @@ const Finance = () => {
   const [category, setCategory] = useState([]);
   const [categoryValue, setCategoryValue] = useState("");
   const [name, setName] = useState("");
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const db = getDatabase(app);
+    const newDocRef = push(ref(db, "transactions"));
     const date = new Date();
     const todayDate = date.toISOString().split("T")[0];
     let data = {
-      id: Number(`${date.getDate()}${date.getMonth()}${date.getFullYear()}`),
+      id: Number(
+        `${date.getDate()}${
+          date.getMonth() + 1
+        }${date.getFullYear()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}`
+      ),
       name: name,
       type: type,
       categoryValue: categoryValue.toLowerCase(),
       amount: Number(amount),
       date: todayDate,
+      time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
     };
     setFinance((prev) => [...prev, data]);
+    set(newDocRef, data)
+      .catch((err) => {
+        alert("something is wrong", err);
+      });
+    // const existingTransactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+    // existingTransactions.push(finance)
+
+    // localStorage.setItem('transaction', JSON.stringify(existingTransactions));
     setAmount("");
     setType("");
     setCategory([]);
@@ -119,7 +137,6 @@ const Finance = () => {
           Add
         </button>
       </form>
-      {/* {console.log(finance, 'this is from main')} */}
     </div>
   );
 };

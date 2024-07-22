@@ -40,7 +40,7 @@ form button{
     form {
         width: 95vw;
     }
-    form input, select, button{        
+    form input, select, button{
         font-size: 1rem;
         padding: 6px 6px;
     }

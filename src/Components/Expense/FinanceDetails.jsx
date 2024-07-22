@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./FinanceDetails.css";
 import FinanceContext from "../../Context/FinanceContext";
 import OverallCard from "../OverallCard/OverallCard";
@@ -161,7 +161,6 @@ const FinanceCard = ({ day, incomeData, expenseData }) => {
         expenseTotal={totalExpenseAmount}
       />
       </div>
-     
     </div>
   );
 };
@@ -169,9 +168,15 @@ const FinanceCard = ({ day, incomeData, expenseData }) => {
 const FinanceDetails = () => {
   // Getting data from global state
   const data = useContext(FinanceContext);
+ 
+    // const data = JSON.parse(localStorage.getItem('transactions')) || [];
+  
+
 
   // creating new array of income data from transactions data
   const incomeData = data.finance.filter((item) => item.type === "income");
+  // const incomeData = data.filter((item) => item.type === "income");
+
 
   // Total amount of income data
   const incomeTotal = incomeData.reduce((totalAmount, currentObject) => {
@@ -180,6 +185,7 @@ const FinanceDetails = () => {
 
   // creating new array of expense data from transactions data
   const expenseData = data.finance.filter((item) => item.type === "expense");
+  // const expenseData = data.filter((item) => item.type === "expense");
 
   // Total amount of expense data
   const expenseTotal = expenseData.reduce((totalAmount, currentObject) => {
@@ -199,7 +205,7 @@ const FinanceDetails = () => {
 
   return (
     <div className="finance_details">
-      <h2 className="cardTitle" style={{color: `${incomeTotal - expenseTotal >= 0 ? 'green' : 'red'}`, fontWeight: "600", fontSize: "2rem", marginTop: "20px", marginBottom: "20px", textDecoration: "none"}}>Balance: {convetToINR(incomeTotal - expenseTotal)}</h2>
+      <a href="#transactions"><h2 className="cardTitle" style={{color: `${incomeTotal - expenseTotal >= 0 ? 'green' : 'red'}`, fontWeight: "600", fontSize: "2rem", marginTop: "20px", marginBottom: "20px", textDecoration: "none"}}>Balance: {convetToINR(incomeTotal - expenseTotal)}</h2></a>
       <div className="day">
         <FinanceCard
           title="Expenses"
