@@ -66,7 +66,6 @@ const Finance = () => {
     setCategoryValue("");
     setName("");
   };
-
   return (
     <div className="finance">
       <form onSubmit={handleSubmit}>
