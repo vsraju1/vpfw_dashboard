@@ -1,6 +1,7 @@
 import React from 'react'
 import './Homepage.css'
 import Card from '../../Components/DashboardCard/DashboardCard.jsx'
+import Header from '../../Components/Header/Header.jsx'
 
 const data = {
     title: 'expenses',
@@ -56,7 +57,7 @@ const links = {
 const Homepage = () => {
   return (
     <>
-    <h1 className='homePage_title'>Dashboard</h1>
+    <Header />
     <div className='container'>
         <Card data={data} color="red" classNam="expences"/>
         <Card data={income} color="green" classNam="income"/>

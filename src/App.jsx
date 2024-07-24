@@ -9,31 +9,33 @@ import FinanceContext from './Context/FinanceContext'
 import FinanceDetails from './Components/Expense/FinanceDetails'
 import { srcData } from './Data/Data'
 import TransactonsPage from './Pages/TransactionsPage/TransactonsPage'
+import WorkForm from './Components/WorksForm/WorkForm'
 
 
 
 function App() {
   const [finance, setFinance] = useState(srcData)
 
-  const fetchDataFromFirebaseDb = async() => {
-    const db = getDatabase(app);
-    const dbRef = ref(db, "transactions");
-    const snapShot = await get(dbRef);
-    if(snapShot.exists()) {
-      setFinance(Object.values(snapShot.val()))
-    } else {
-      alert("There is no data or an error occured. Please add a transaction and try again.")
-    }
-  }
+  // const fetchDataFromFirebaseDb = async() => {
+  //   const db = getDatabase(app);
+  //   const dbRef = ref(db, "transactions");
+  //   const snapShot = await get(dbRef);
+  //   if(snapShot.exists()) {
+  //     setFinance(Object.values(snapShot.val()))
+  //   } else {
+  //     alert("There is no data or an error occured. Please add a transaction and try again.")
+  //   }
+  // }
 
-  fetchDataFromFirebaseDb();
+  // fetchDataFromFirebaseDb();
 
   return (
     <FinanceContext.Provider value={{finance, setFinance}}>
-      {/* <Homepage /> */}
+      {/* <Homepage />
       <Finance />
       <FinanceDetails />
-      <TransactonsPage />
+      <TransactonsPage /> */}
+      <WorkForm />
     </FinanceContext.Provider>
   )
 }
