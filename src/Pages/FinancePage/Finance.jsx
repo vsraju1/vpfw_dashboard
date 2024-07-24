@@ -9,6 +9,7 @@ const typeData = [
     type: "expense",
     categories: [
       "Material",
+      "Transport",
       "Paint",
       "Salary",
       "Intrest",
@@ -31,10 +32,11 @@ const Finance = () => {
   const [category, setCategory] = useState([]);
   const [categoryValue, setCategoryValue] = useState("");
   const [name, setName] = useState("");
+  const [showNames, setShowNames] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const db = getDatabase(app);
-    const newDocRef = push(ref(db, "transactions"));
+    // const db = getDatabase(app); // uncomment these for final
+    // const newDocRef = push(ref(db, "transactions")); // uncomment these for final
     const date = new Date();
     const todayDate = date.toISOString().split("T")[0];
     let data = {
@@ -51,10 +53,11 @@ const Finance = () => {
       time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
     };
     setFinance((prev) => [...prev, data]);
-    set(newDocRef, data)
-      .catch((err) => {
-        alert("something is wrong", err);
-      });
+    // uncomment these for final
+    // set(newDocRef, data).catch((err) => {
+    //   alert("something is wrong", err);
+    // });
+
     // const existingTransactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
     // existingTransactions.push(finance)
@@ -66,6 +69,17 @@ const Finance = () => {
     setCategoryValue("");
     setName("");
   };
+  // const namesArray = [];
+  // finance.map((item) => {
+  //   if (namesArray.includes(item.name)) {
+  //     return namesArray;
+  //   } else {
+  //     return namesArray.push(item.name);
+  //   }
+  // });
+  // const handleNamesArray = () => {
+  //   setShowNames(!showNames);
+  // };
   return (
     <div className="finance">
       <form onSubmit={handleSubmit}>
@@ -126,8 +140,8 @@ const Finance = () => {
         <label>
           <input
             type="text"
-            placeholder="Person name/ vendor name"
             value={name}
+            placeholder="Enter name"
             onChange={(e) => setName(e.target.value)}
             required
           />

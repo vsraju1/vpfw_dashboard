@@ -4,9 +4,8 @@ import "./TransactionsPage.css";
 
 const tableHeaderDate = [
   "id",
-  "name",
   "type",
-  "Sub type",
+  "name",
   "amount",
   "date",
   "time",
@@ -50,6 +49,7 @@ const TransactonsPage = () => {
   };
   return (
     <div className="transactions" id="transactions">
+      {console.log("This is from transaction page")}
       <h2>All Transactions</h2>
       <div className="transaction_total">
         <div className="total">
@@ -83,9 +83,8 @@ const TransactonsPage = () => {
                 }`}
               >
                 <td className="transaction_id">{index + 1}</td>
-                <td>{capitalizeFirstLetter(transaction.name)}</td>
-                <td className="transaction_type">{capitalizeFirstLetter(transaction.type)}</td>
                 <td>{capitalizeFirstLetter(transaction.categoryValue)}</td>
+                <td>{capitalizeFirstLetter(transaction.name)}</td>
                 <td className={`transaction_amount`}>
                   {convetToINR(transaction.amount)}
                 </td>

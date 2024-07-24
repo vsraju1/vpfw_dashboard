@@ -3,7 +3,7 @@ import { getDatabase, ref, get } from 'firebase/database'
 import './App.css'
 import Homepage from './Pages/Homepage/Homepage'
 import Finance from './Pages/FinancePage/Finance'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // import DataFile from './Components/Data/DataFile'
 import FinanceContext from './Context/FinanceContext'
 import FinanceDetails from './Components/Expense/FinanceDetails'
@@ -15,18 +15,20 @@ import TransactonsPage from './Pages/TransactionsPage/TransactonsPage'
 function App() {
   const [finance, setFinance] = useState(srcData)
 
-  const fetchDataFromFirebaseDb = async() => {
-    const db = getDatabase(app);
-    const dbRef = ref(db, "transactions");
-    const snapShot = await get(dbRef);
-    if(snapShot.exists()) {
-      setFinance(Object.values(snapShot.val()))
-    } else {
-      alert("There is no data or an error occured. Please add a transaction and try again.")
-    }
-  }
-
-  fetchDataFromFirebaseDb();
+  // useEffect(() => {
+  //   const fetchDataFromFirebaseDb = async() => {
+  //     const db = getDatabase(app);
+  //     const dbRef = ref(db, "transactions");
+  //     const snapShot = await get(dbRef);
+  //     if(snapShot.exists()) {
+  //       setFinance(Object.values(snapShot.val()))
+  //     } else {
+  //       alert("There is no data or an error occured. Please add a transaction and try again.")
+  //     }
+  //   }
+  //   fetchDataFromFirebaseDb();
+  // }
+  // , [])
 
   return (
     <FinanceContext.Provider value={{finance, setFinance}}>

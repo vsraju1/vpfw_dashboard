@@ -42,7 +42,6 @@
     font-size: 1rem;
     width: 100%;
     border-radius: 5px;
-    background-color: aqua;
     /* overflow: hidden; */
 }
 
@@ -52,16 +51,17 @@
     font-weight: bold;
 }
 .transaction_table th, td{
-    padding: 12px 15px;
+    padding: 8px 15px;
     text-align: right;
 }
 
 .transaction_table tbody tr{
-    border-bottom: 1px solid #dddddd;
+    font-size: 1rem;
+    border-bottom: 1px solid #f3f1f1;
 }
 
 .transaction_table tbody tr:nth-of-type(even){
-    background-color: #f3f3f3;
+    background-color: #d6d6d6;
 }
 .transaction_table tbody tr:last-of-type{
     border-bottom: 2px solid rgb(236, 196, 15);
