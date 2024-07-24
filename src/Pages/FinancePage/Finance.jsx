@@ -35,8 +35,8 @@ const Finance = () => {
   const [showNames, setShowNames] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const db = getDatabase(app); // uncomment these for final
-    // const newDocRef = push(ref(db, "transactions")); // uncomment these for final
+    const db = getDatabase(app); // uncomment these for final
+    const newDocRef = push(ref(db, "transactions")); // uncomment these for final
     const date = new Date();
     const todayDate = date.toISOString().split("T")[0];
     let data = {
@@ -54,9 +54,9 @@ const Finance = () => {
     };
     setFinance((prev) => [...prev, data]);
     // uncomment these for final
-    // set(newDocRef, data).catch((err) => {
-    //   alert("something is wrong", err);
-    // });
+    set(newDocRef, data).catch((err) => {
+      alert("something is wrong", err);
+    });
 
     // const existingTransactions = JSON.parse(localStorage.getItem('transactions')) || [];
 

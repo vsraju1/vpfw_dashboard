@@ -15,20 +15,20 @@ import TransactonsPage from './Pages/TransactionsPage/TransactonsPage'
 function App() {
   const [finance, setFinance] = useState(srcData)
 
-  // useEffect(() => {
-  //   const fetchDataFromFirebaseDb = async() => {
-  //     const db = getDatabase(app);
-  //     const dbRef = ref(db, "transactions");
-  //     const snapShot = await get(dbRef);
-  //     if(snapShot.exists()) {
-  //       setFinance(Object.values(snapShot.val()))
-  //     } else {
-  //       alert("There is no data or an error occured. Please add a transaction and try again.")
-  //     }
-  //   }
-  //   fetchDataFromFirebaseDb();
-  // }
-  // , [])
+  useEffect(() => {
+    const fetchDataFromFirebaseDb = async() => {
+      const db = getDatabase(app);
+      const dbRef = ref(db, "transactions");
+      const snapShot = await get(dbRef);
+      if(snapShot.exists()) {
+        setFinance(Object.values(snapShot.val()))
+      } else {
+        alert("There is no data or an error occured. Please add a transaction and try again.")
+      }
+    }
+    fetchDataFromFirebaseDb();
+  }
+  , [])
 
   return (
     <FinanceContext.Provider value={{finance, setFinance}}>
