@@ -1,20 +1,22 @@
-import app from './firebaseConfig'
-import { getDatabase, ref, get } from 'firebase/database'
-import './App.css'
-import Homepage from './Pages/Homepage/Homepage'
-import Finance from './Pages/FinancePage/Finance'
-import { useState } from 'react'
+import app from "./firebaseConfig";
+import { getDatabase, ref, get } from "firebase/database";
+import "./App.css";
+import Homepage from "./Pages/Homepage/Homepage";
+import Finance from "./Pages/FinancePage/Finance";
+import { useState } from "react";
 // import DataFile from './Components/Data/DataFile'
-import FinanceContext from './Context/FinanceContext'
-import FinanceDetails from './Components/Expense/FinanceDetails'
-import { srcData } from './Data/Data'
-import TransactonsPage from './Pages/TransactionsPage/TransactonsPage'
-import WorkForm from './Components/WorksForm/WorkForm'
-
-
+import FinanceContext from "./Context/FinanceContext";
+import FinanceDetails from "./Components/Expense/FinanceDetails";
+import { srcData } from "./Data/Data";
+import TransactonsPage from "./Pages/TransactionsPage/TransactonsPage";
+import WorkForm from "./Components/WorksForm/WorkForm";
+import { worksData } from "./Data/Data";
+import { WorksContext } from "./Context/WorkContext";
+import WorksPage from "./Pages/WorksPage/WorksPage";
 
 function App() {
-  const [finance, setFinance] = useState(srcData)
+  const [finance, setFinance] = useState(srcData);
+  const [works, setWorks] = useState(worksData);
 
   // const fetchDataFromFirebaseDb = async() => {
   //   const db = getDatabase(app);
@@ -30,14 +32,17 @@ function App() {
   // fetchDataFromFirebaseDb();
 
   return (
-    <FinanceContext.Provider value={{finance, setFinance}}>
-      {/* <Homepage />
+    <FinanceContext.Provider value={{ finance, setFinance }}>
+      <WorksContext.Provider value={{ works, setWorks }}>
+        {/* <Homepage />
       <Finance />
       <FinanceDetails />
       <TransactonsPage /> */}
-      <WorkForm />
+      {/* <WorkForm /> */}
+      <WorksPage />
+      </WorksContext.Provider>
     </FinanceContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
