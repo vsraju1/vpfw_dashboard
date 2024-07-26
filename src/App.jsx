@@ -16,7 +16,7 @@ import WorksPage from "./Pages/WorksPage/WorksPage";
 
 function App() {
   const [finance, setFinance] = useState(srcData);
-  const [works, setWorks] = useState(worksData);
+  const [workList, setWorkList] = useState(worksData);
 
   // const fetchDataFromFirebaseDb = async() => {
   //   const db = getDatabase(app);
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <FinanceContext.Provider value={{ finance, setFinance }}>
-      <WorksContext.Provider value={{ works, setWorks }}>
+      <WorksContext.Provider value={{ workList, setWorkList }}>
         {/* <Homepage />
       <Finance />
       <FinanceDetails />

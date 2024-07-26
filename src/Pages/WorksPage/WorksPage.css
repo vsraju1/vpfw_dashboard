@@ -1,11 +1,20 @@
 .worksPage{
     /* background-color: lightcyan; */
     width: 85%;
+    min-height: 100vh;
     margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
 }
+
+
 
 /* Top Css */
 .worksPage .top{
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -27,6 +36,7 @@
 
 /* Middle css  */
 .worksPage .middle{
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -34,10 +44,11 @@
 }
 /* Middle css end  */
 
-/* .worksPage .bottom{
+.worksPage .bottom{
+    width: 100%;
     display: flex;
     flex-direction: column;
-} */
+}
 .worksPage .bottom .work_filters{
     display: flex;
     padding: 1.6rem 0;
