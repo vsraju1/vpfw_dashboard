@@ -95,7 +95,7 @@ const TransactonsPage = () => {
             <tr>
               <td className="transaction_id"></td>
               <td></td>
-              <td className="transaction_type"></td>
+              
               <td style={{ fontSize: "1.4rem" }}>Balance</td>
               <td
                 style={{ fontSize: "1.4rem" }}
@@ -108,7 +108,7 @@ const TransactonsPage = () => {
                 {convetToINR(incomeTotal - expenseTotal)}
               </td>
               <td></td>
-              <td className="transaction_time"></td>
+              <td></td>
             </tr>
           </tbody>
         </table>
