@@ -9,6 +9,7 @@ const typeData = [
     type: "expense",
     categories: [
       "Material",
+      "Welding Rods",
       "Transport",
       "Paint",
       "Salary",

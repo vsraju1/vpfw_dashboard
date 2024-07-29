@@ -14,6 +14,8 @@ const TransactonsPage = () => {
   const srcdata = useContext(FinanceContext);
   const data = [...srcdata.finance].reverse();
 
+  const today = new Date()
+
   // creating new array of income data from transactions data
   const incomeData = data.filter((item) => item.type === "income");
   // const incomeData = data.filter((item) => item.type === "income");
@@ -49,7 +51,6 @@ const TransactonsPage = () => {
   };
   return (
     <div className="transactions" id="transactions">
-      {console.log("This is from transaction page")}
       <h2>All Transactions</h2>
       <div className="transaction_total">
         <div className="total">
@@ -88,14 +89,13 @@ const TransactonsPage = () => {
                 <td className={`transaction_amount`}>
                   {convetToINR(transaction.amount)}
                 </td>
-                <td>{transaction.date}</td>
+                <td>{transaction.date === today.toISOString().split("T")[0] ? "Today" : transaction.date}</td>
                 <td className="transaction_time">{transaction.time}</td>
               </tr>
             ))}
             <tr>
               <td className="transaction_id"></td>
               <td></td>
-              
               <td style={{ fontSize: "1.4rem" }}>Balance</td>
               <td
                 style={{ fontSize: "1.4rem" }}
