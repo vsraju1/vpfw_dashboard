@@ -31,6 +31,10 @@
     color: black;
     background-color: #F4C119;
     border-radius: 5px;
+    cursor: pointer;
+}
+.worksPage .top button:active{
+    transform: translateY(2px);
 }
 /* top css end  */
 
@@ -124,6 +128,9 @@
     color: black;
     background-color: #F4C119;
     border-radius: 5px;
+}
+.worksPage table tbody button:active{
+    transform: scale(0.99);
 }
 
 .worksPage .works_table tbody tr{

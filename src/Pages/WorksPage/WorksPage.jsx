@@ -8,6 +8,8 @@ const WorksPage = () => {
   const {workList} = useContext(WorksContext)
   const [showWorkForm, setShowWorkForm] = useState(false);
   const [status, setStatus] = useState("")
+  const [addNewAdvance, setAddNewAdvance] = useState(0)
+  const [showAdvanceBox, setShowAdvanceBox] = useState(true)
   const tableHeaders = [
     "S.No.",
     "Received",
@@ -25,8 +27,50 @@ const WorksPage = () => {
   const handleAddWorkBtn = () => {
     setShowWorkForm(!showWorkForm);
   };
+
+  const settingDateFormat = (str) => {
+    return str.toISOString().split("T")[0]
+  }
+  const date = new Date()
+
+  const handleWorkUpdate = (workId) => {
+    const workArray = workList.filter((item) => item.id === workId)
+    const work = workArray[0]
+    console.log(work,"work before updating")
+    if(status || addNewAdvance){
+      if(addNewAdvance && !status){
+        const newAdvance = {
+          amount: Number(addNewAdvance),
+          date: settingDateFormat(date),
+        }
+        work.advance.push(newAdvance)
+        work.updatedAt = settingDateFormat(date)
+        work.received_amt = parseFloat(work.advance?.reduce((totalAmount, currentObject) => totalAmount + currentObject.amount, 0))
+      }
+      else if(status && !addNewAdvance){
+        if(status == "Balance Pending"){
+          work.isPending = false
+          work.delivered = true
+          work.isFitted = true
+          work.updatedAt = settingDateFormat(date)
+          setShowAdvanceBox(true)
+        }
+        else if(status == "Completed"){
+          work.isPending = false
+          work.delivered = true
+          work.isFitted = true
+          work.balancePending = false
+          work.updatedAt = settingDateFormat(date)
+          setShowAdvanceBox(false)
+        }
+      }
+    }
+    setAddNewAdvance(0)
+    console.log(work, "work after updated")
+  }
   return (
     <div className="worksPage">
+      {console.log("From worksPage: ", workList)}
         {showWorkForm && <WorkForm setShowWorksForm={setShowWorkForm} worksForm={showWorkForm}/>}
         <div className="top">
           <h2>Works List</h2>
@@ -69,181 +113,20 @@ const WorksPage = () => {
                       <td>{item.received_date}</td>
                       <td>{item.work_name}</td>
                       <td>{item.customer_name}</td>
-                      <td><select name="status" id="status">
-                      <option value="pending">set status</option>
+                      <td><select value={status} onChange={(e) => setStatus(e.target.value)} name="status" id="status">
+                      <option value="">set status</option>
                       {statusList.map((item, index) => (
                         <option value={item} key={index}>
                           {item}
                         </option>
                       ))}
                     </select></td>
-                      <td> <input type="number" placeholder="Add advance" /></td>
+                      {showAdvanceBox && <td> <input type="number" placeholder="Add advance" value={addNewAdvance} onChange={(e) => setAddNewAdvance(e.target.value)}/></td>}
                       <td>{item.received_amt}</td>
                       <td>{item.updatedAt}</td>
-                      <td><button>Update</button></td>
+                      <td><button onClick={() => handleWorkUpdate(item.id)}>Update</button></td>
                     </tr>
                   ))}
-                {/* <tr>
-                  <td>2</td>
-                  <td>25-07-2024</td>
-                  <td>Tirupathi Reddy</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>25-07-2024</td>
-                  <td>Srinivas</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>25-07-2024</td>
-                  <td>Balvanth reddy</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>25-07-2024</td>
-                  <td>Uttej</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>25-07-2024</td>
-                  <td>Nagu</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>25-07-2024</td>
-                  <td>Vijju reddy</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>25-07-2024</td>
-                  <td>kiran</td>
-                  <td>
-                    <select name="status" id="status">
-                      <option value="pending">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select>
-                  </td>
-                  <td>
-                    <input type="number" placeholder="Add advance" />
-                  </td>
-                  <td>20,000</td>
-                  <td>27-07-2024</td>
-                  <td>
-                    <button>Update</button>
-                  </td>
-                </tr> */}
               </tbody>
             </table>
           </div>

@@ -10,7 +10,7 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
   const [workName, setWorkName] = useState("");
-  const [advanceAmount, setAdvanceAmount] = useState([]);
+  const [advanceAmount, setAdvanceAmount] = useState(0);
   const [advanceArray, setAdvanceArray] = useState([])
   const [finalAmount, setFinalAmount] = useState(0);
 
@@ -18,15 +18,19 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
     return str.toISOString().split("T")[0]
   }
   const date = new Date()
-  const handleAdvanceAmount = (amt) => {
-    const newAdvance = {
-      amount: Number(amt),
-      advance_date: settingDateFormat(date)
-    }
-    setAdvanceAmount([...advanceAmount, newAdvance])
-  }
+  // const handleAdvanceAmount = (amt) => {
+  //   const newAdvance = {
+  //     amt,
+  //     date
+  //   }
+  //   return setAdvanceAmount([...newAdvance])
+  // }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const newAdvance = {
+      amount: Number(advanceAmount),
+      date: settingDateFormat(date),
+    }
     // Work order object
     const workOrder = {
       id: Number(`${date.getDate()}${
@@ -35,17 +39,23 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
       customer_name: customerName,
       phone: phone,
       work_name: workName,
-      advance: advanceAmount, // Empty array for advances
+      advance: [...advanceArray, newAdvance], // Empty array for advances
       final_amt: Number(finalAmount) || 0, // Default final amount
       received_date: settingDateFormat(date), // Today's date
       received_time: `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-      received_amt: parseFloat(advanceAmount) || 0, // Total advances (initially 0)
+      received_amt: parseFloat(advanceArray?.reduce((totalAmount, currentObject) => totalAmount + currentObject.amount, 0)) + newAdvance.amount, // Total advances (initially 0)
       isPending: true, // Default status
       delivered: false, // Default status
       isFitted: false, // Default status
       balancePending: true, // Default status
       updatedAt: settingDateFormat(date), // Initial update date
     };
+    // const totalIncomeAmount = filteredIncomeData?.reduce(
+    //   (totalAmount, currentObject) => {
+    //     return totalAmount + currentObject.amount;
+    //   },
+    //   0
+    // );
 
     // Adding the work to work list
     setWorkList((prev) => [...prev, workOrder])
@@ -106,8 +116,8 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
               className="br-5"
               type="number"
               placeholder="Initial Advance"
-              value={advanceAmount.amount}
-              onChange={(e) => handleAdvanceAmount(e.target.value)}
+              value={advanceAmount}
+              onChange={(e) => setAdvanceAmount(e.target.value)}
             />
           </label>
           <label>
