@@ -11,6 +11,7 @@ const typeData = [
       "Material",
       "Welding Rods",
       "Transport",
+      "Petrol",
       "Paint",
       "Salary",
       "Intrest",
