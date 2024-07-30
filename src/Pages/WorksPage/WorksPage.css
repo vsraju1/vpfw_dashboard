@@ -84,6 +84,13 @@
     transform: scale(1);
     transform-origin:left;
 }
+.work_filters .worksFilter_left span.active{
+    font-weight: 600;
+    color: #03346E;
+}
+.work_filters .worksFilter_left span.active::after{
+    background-color: #03346E;
+}
 .worksPage .bottom .work_filters input{
     border-radius: 5px;
     font-size: 1rem;

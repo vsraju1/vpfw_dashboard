@@ -1,15 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./WorksPage.css";
 import WorksCard from "../../Components/WorksCard/WorksCard";
 import WorkForm from "../../Components/WorksForm/WorkForm";
+import WorkRow from "../../Components/WorkRow/WorkRow";
 import { WorksContext } from "../../Context/WorkContext";
 
 const WorksPage = () => {
-  const {workList} = useContext(WorksContext)
   const [showWorkForm, setShowWorkForm] = useState(false);
-  const [status, setStatus] = useState("")
-  const [addNewAdvance, setAddNewAdvance] = useState(0)
-  const [showAdvanceBox, setShowAdvanceBox] = useState(true)
+  const { workList } = useContext(WorksContext);
+  const [allWorks, setAllWorks] = useState(false);
+  const [pendingWorks, setPendingWorks] = useState(true);
+  const [unPaidWorks, setUnPaidWorks] = useState(false);
+  const [completedWorks, setCompletedWorks] = useState(false);
+
   const tableHeaders = [
     "S.No.",
     "Received",
@@ -20,117 +23,135 @@ const WorksPage = () => {
     "Amount Received",
     "Last Updated",
   ];
-  const statusList = [
-    "Balance Pending",
-    "Completed",
-  ];
+
+ 
+
+  
+  // let worksData = workList;
+  const handleAllWorksFilter = () => {
+    setAllWorks(true);
+    setPendingWorks(false);
+    setUnPaidWorks(false);
+    setCompletedWorks(false);
+  };
+  const handlePendingFilter = () => {
+    setAllWorks(false);
+    setPendingWorks(true);
+    setUnPaidWorks(false);
+    setCompletedWorks(false);
+  };
+  const handleUnPaidFilter = () => {
+    setAllWorks(false);
+    setPendingWorks(false);
+    setUnPaidWorks(true);
+    setCompletedWorks(false);
+  };
+  const handleCompletedFilter = () => {
+    setAllWorks(false);
+    setPendingWorks(false);
+    setUnPaidWorks(false);
+    setCompletedWorks(true);
+  };
+  let worksData;
+  console.log(worksData, "From outsite if");
+  if (allWorks && !pendingWorks && !unPaidWorks && !completedWorks) {
+    worksData = workList;
+    console.log("all works main data: ", worksData);
+  }
+  if (pendingWorks && !allWorks && !unPaidWorks && !completedWorks) {
+    worksData = workList.filter((item) => item.isPending === true);
+    // tableHeaders.splice(tableHeaders.indexOf("Status"), 1)
+  }
+  if (unPaidWorks && !pendingWorks && !allWorks && !completedWorks) {
+    worksData = workList.filter(
+      (item) => item.balancePending === true && item.isPending === false
+    );
+  }
+  if (completedWorks && !pendingWorks && !unPaidWorks && !allWorks) {
+    worksData = workList.filter((item) => item.isPending === false && item.balancePending === false);
+  }
+
+
   const handleAddWorkBtn = () => {
     setShowWorkForm(!showWorkForm);
   };
 
-  const settingDateFormat = (str) => {
-    return str.toISOString().split("T")[0]
-  }
-  const date = new Date()
-
-  const handleWorkUpdate = (workId) => {
-    const workArray = workList.filter((item) => item.id === workId)
-    const work = workArray[0]
-    console.log(work,"work before updating")
-    if(status || addNewAdvance){
-      if(addNewAdvance && !status){
-        const newAdvance = {
-          amount: Number(addNewAdvance),
-          date: settingDateFormat(date),
-        }
-        work.advance.push(newAdvance)
-        work.updatedAt = settingDateFormat(date)
-        work.received_amt = parseFloat(work.advance?.reduce((totalAmount, currentObject) => totalAmount + currentObject.amount, 0))
-      }
-      else if(status && !addNewAdvance){
-        if(status == "Balance Pending"){
-          work.isPending = false
-          work.delivered = true
-          work.isFitted = true
-          work.updatedAt = settingDateFormat(date)
-          setShowAdvanceBox(true)
-        }
-        else if(status == "Completed"){
-          work.isPending = false
-          work.delivered = true
-          work.isFitted = true
-          work.balancePending = false
-          work.updatedAt = settingDateFormat(date)
-          setShowAdvanceBox(false)
-        }
-      }
-    }
-    setAddNewAdvance(0)
-    console.log(work, "work after updated")
-  }
   return (
     <div className="worksPage">
       {console.log("From worksPage: ", workList)}
-        {showWorkForm && <WorkForm setShowWorksForm={setShowWorkForm} worksForm={showWorkForm}/>}
-        <div className="top">
-          <h2>Works List</h2>
-          <button onClick={handleAddWorkBtn}>Add Work</button>
-        </div>
-        <div className="middle">
-          <WorksCard />
-          <WorksCard worksHeading="Completed Works" worksNumbers="166" />
-          <WorksCard worksHeading="All Works" worksNumbers="288" />
-          <WorksCard
-            worksHeading="Payment Receivables"
-            worksNumbers="₹176,000"
-          />
-        </div>
-        <div className="bottom">
-          <div className="work_filters">
-            <div className="worksFilter_left workFilterItem">
-              <span>All Works</span>
-              <span>Pending</span>
-              <span>Unpaid</span>
-              <span>Completed</span>
-            </div>
-            <div className="worksFilter_right workFilterItem">
-              <input type="text" placeholder="Search here" />
-            </div>
+      {showWorkForm && (
+        <WorkForm setShowWorksForm={setShowWorkForm} worksForm={showWorkForm} />
+      )}
+      <div className="top">
+        <h2>Works List</h2>
+        <button onClick={handleAddWorkBtn}>Add Work</button>
+      </div>
+      <div className="middle">
+        <WorksCard />
+        <WorksCard worksHeading="Completed Works" worksNumbers="166" />
+        <WorksCard worksHeading="All Works" worksNumbers="288" />
+        <WorksCard worksHeading="Payment Receivables" worksNumbers="₹176,000" />
+      </div>
+      <div className="bottom">
+        <div className="work_filters">
+          <div className="worksFilter_left workFilterItem">
+            <span
+              className={allWorks ? `active` : ""}
+              onClick={handleAllWorksFilter}
+            >
+              All Works
+            </span>
+            <span
+              className={pendingWorks ? `active` : ""}
+              onClick={handlePendingFilter}
+            >
+              Pending
+            </span>
+            <span
+              className={unPaidWorks ? `active` : ""}
+              onClick={handleUnPaidFilter}
+            >
+              Unpaid
+            </span>
+            <span
+              className={completedWorks ? `active` : ""}
+              onClick={handleCompletedFilter}
+            >
+              Completed
+            </span>
           </div>
-          <div className="works_table">
-            <table>
-              <thead>
-                <tr>
-                  {tableHeaders.map((item, index) => (
-                    <th key={index}>{item}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                  {workList.reverse()?.map((item, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{item.received_date}</td>
-                      <td>{item.work_name}</td>
-                      <td>{item.customer_name}</td>
-                      <td><select value={status} onChange={(e) => setStatus(e.target.value)} name="status" id="status">
-                      <option value="">set status</option>
-                      {statusList.map((item, index) => (
-                        <option value={item} key={index}>
-                          {item}
-                        </option>
-                      ))}
-                    </select></td>
-                      {showAdvanceBox && <td> <input type="number" placeholder="Add advance" value={addNewAdvance} onChange={(e) => setAddNewAdvance(e.target.value)}/></td>}
-                      <td>{item.received_amt}</td>
-                      <td>{item.updatedAt}</td>
-                      <td><button onClick={() => handleWorkUpdate(item.id)}>Update</button></td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          <div className="worksFilter_right workFilterItem">
+            <input type="text" placeholder="Search here" />
           </div>
         </div>
+        <div className="works_table">
+          <table>
+            <thead>
+              <tr>
+                {tableHeaders.map((item, index) => (
+                  <th key={index}>{item}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {worksData?.reverse().map((item, index) => (
+                <WorkRow
+                  key={index}
+                  index={index}
+                  receivedDate={item.received_date}
+                  workName={item.work_name}
+                  customerName={item.customer_name}
+                  receivedAmount={item.received_amt}
+                  updatedAt={item.updatedAt}
+                  workId={item.id}
+                  workBalance={item.balancePending}
+                  workStatus={item.isPending}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
