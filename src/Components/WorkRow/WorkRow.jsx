@@ -29,7 +29,7 @@ const WorkRow = ({
     const work = workArray[0];
     console.log(work, "work before updating");
     if (status || addNewAdvance) {
-      if (addNewAdvance && !status) {
+      if (addNewAdvance) {
         const newAdvance = {
           amount: Number(addNewAdvance),
           date: settingDateFormat(date),
@@ -42,7 +42,7 @@ const WorkRow = ({
             0
           )
         );
-      } else if (status && !addNewAdvance) {
+      } else if (status) {
         if (status == "Balance Pending") {
           work.isPending = false;
           work.delivered = true;
@@ -63,11 +63,12 @@ const WorkRow = ({
     console.log(work, "work after updated");
   };
 
-  const receivedAmountfn = (id) => {
-    const workArray = workList.filter((item) => item.id === workId);
-    const work = workArray[0];
-    return work.received_amt;
-  };
+    const receivedAmountfn = (id) => {
+      const workArray = workList.filter((item) => item.id === workId);
+      const work = workArray[0];
+      return work.received_amt;
+    }
+
   return (
     <tr>
       <td>{index + 1}</td>

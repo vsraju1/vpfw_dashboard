@@ -23,10 +23,6 @@ const WorksPage = () => {
     "Amount Received",
     "Last Updated",
   ];
-
- 
-
-  
   // let worksData = workList;
   const handleAllWorksFilter = () => {
     setAllWorks(true);
@@ -71,7 +67,19 @@ const WorksPage = () => {
     worksData = workList.filter((item) => item.isPending === false && item.balancePending === false);
   }
 
+  const NumberOfPendingWorks = workList.filter((item) => item.isPending === true)
+  const NumberOfCompletedWorks = workList.filter((item) => item.isPending === false && item.balancePending === false)
 
+  const paymentReceivables = () => {
+    const paymentPendingWorks = workList.filter((item) => item.isPending === false && item.balancePending === true)
+
+    const balanceAmounts = paymentPendingWorks.map((transaction) => {
+      return transaction.final_amt - transaction.received_amt;
+    })
+
+    const totalPendingAmount = balanceAmounts.reduce((sum, balance) => sum + balance, 0)
+    return totalPendingAmount
+  }
   const handleAddWorkBtn = () => {
     setShowWorkForm(!showWorkForm);
   };
@@ -87,10 +95,10 @@ const WorksPage = () => {
         <button onClick={handleAddWorkBtn}>Add Work</button>
       </div>
       <div className="middle">
-        <WorksCard />
-        <WorksCard worksHeading="Completed Works" worksNumbers="166" />
-        <WorksCard worksHeading="All Works" worksNumbers="288" />
-        <WorksCard worksHeading="Payment Receivables" worksNumbers="₹176,000" />
+        <WorksCard worksNumbers={NumberOfPendingWorks.length}/>
+        <WorksCard worksHeading="Completed Works" worksNumbers={NumberOfCompletedWorks.length} />
+        <WorksCard worksHeading="All Works" worksNumbers={workList.length} />
+        <WorksCard worksHeading="Payment Receivables" worksNumbers={paymentReceivables()} />
       </div>
       <div className="bottom">
         <div className="work_filters">

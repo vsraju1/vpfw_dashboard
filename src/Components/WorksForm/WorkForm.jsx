@@ -18,13 +18,6 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
     return str.toISOString().split("T")[0]
   }
   const date = new Date()
-  // const handleAdvanceAmount = (amt) => {
-  //   const newAdvance = {
-  //     amt,
-  //     date
-  //   }
-  //   return setAdvanceAmount([...newAdvance])
-  // }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newAdvance = {
