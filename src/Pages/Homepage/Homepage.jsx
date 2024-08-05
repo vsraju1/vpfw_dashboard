@@ -58,7 +58,7 @@ const Homepage = () => {
   return (
     <>
     <Header />
-    <div className='container'>
+    {/* <div className='container'>
         <Card data={data} color="red" classNam="expences"/>
         <Card data={income} color="green" classNam="income"/>
         <Card data={pendingWorks} color="red" classNam="pending"/>
@@ -67,7 +67,7 @@ const Homepage = () => {
         <Card data={completedWorks} color="blueviolet" classNam="completed"/>
         <Card data={salary} color="red" classNam="salary"/>
         <Card data={links} color="cyan" classNam="links"/>
-    </div>
+    </div> */}
     </>
   )
 }

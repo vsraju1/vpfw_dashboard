@@ -6,14 +6,14 @@ const WorkRow = ({
   receivedDate,
   workName,
   customerName,
-  receivedAmount,
+  advance,
   updatedAt,
   workId,
   workStatus,
   workBalance,
 }) => {
   const [addNewAdvance, setAddNewAdvance] = useState(0);
-  const { workList } = useContext(WorksContext);
+  const { workList, setWorkList } = useContext(WorksContext);
   const [status, setStatus] = useState("");
   const [showAdvanceBox, setShowAdvanceBox] = useState(true);
 
@@ -25,49 +25,78 @@ const WorkRow = ({
   const date = new Date();
 
   const handleWorkUpdate = (work_Id) => {
-    const workArray = workList.filter((item) => item.id === workId);
-    const work = workArray[0];
-    console.log(work, "work before updating");
     if (status || addNewAdvance) {
-      if (addNewAdvance) {
-        const newAdvance = {
-          amount: Number(addNewAdvance),
-          date: settingDateFormat(date),
-        };
-        work.advance.push(newAdvance);
-        work.updatedAt = settingDateFormat(date);
-        work.received_amt = parseFloat(
-          work.advance?.reduce(
-            (totalAmount, currentObject) => totalAmount + currentObject.amount,
-            0
-          )
-        );
-      } else if (status) {
-        if (status == "Balance Pending") {
-          work.isPending = false;
-          work.delivered = true;
-          work.isFitted = true;
-          work.updatedAt = settingDateFormat(date);
-          setShowAdvanceBox(true);
-        } else if (status == "Completed") {
-          work.isPending = false;
-          work.delivered = true;
-          work.isFitted = true;
-          work.balancePending = false;
-          work.updatedAt = settingDateFormat(date);
-          setShowAdvanceBox(false);
+      const updatedWorks = workList.map((work) => {
+        if (work.id === work_Id) {
+          if (status && addNewAdvance) {
+            const newAdvance = {
+              amount: Number(addNewAdvance),
+              date: settingDateFormat(date),
+            };
+            if (status === "Completed") {
+              return {
+                ...work,
+                balancePending: false,
+                delivered: true,
+                isFitted: true,
+                isPending: false,
+                status: "completed",
+                advance:[...work.advance, newAdvance],
+                updatedAt: settingDateFormat(date),
+              };
+            } else if (status === "Balance Pending") {
+              return {
+                ...work,
+                balancePending: true,
+                delivered: true,
+                isFitted: true,
+                isPending: false,
+                status: "balance pending",
+                advance: [...work.advance, newAdvance],
+                updatedAt: settingDateFormat(date),
+              };
+            }
+          } else if (status) {
+            if (status === "Completed") {
+              return {
+                ...work,
+                balancePending: false,
+                delivered: true,
+                isFitted: true,
+                isPending: false,
+                status: "completed",
+                updatedAt: settingDateFormat(date),
+              };
+            } else if (status === "Balance Pending") {
+              return {
+                ...work,
+                balancePending: true,
+                delivered: true,
+                isFitted: true,
+                isPending: false,
+                status: "balance pending",
+                updatedAt: settingDateFormat(date),
+              };
+            }
+          } else if (addNewAdvance) {
+            const newAdvance = {
+              amount: Number(addNewAdvance),
+              date: settingDateFormat(date),
+            };
+            return {
+              ...work,
+              advance: [...work.advance, newAdvance],
+              updatedAt: settingDateFormat(date),
+            };
+          }
         }
-      }
+        return work;
+      });
+      setWorkList(updatedWorks)
     }
     setAddNewAdvance(0);
-    console.log(work, "work after updated");
+    setStatus("");
   };
-
-    const receivedAmountfn = (id) => {
-      const workArray = workList.filter((item) => item.id === workId);
-      const work = workArray[0];
-      return work.received_amt;
-    }
 
   return (
     <tr>
@@ -76,34 +105,35 @@ const WorkRow = ({
       <td>{workName}</td>
       <td>{customerName}</td>
       <td>
-        {(!workStatus && !workBalance) ? "Completed" : <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          name="status"
-          id="status"
-        >
-          <option value="">set status</option>
-          {statusList.map((item, index) => (
-            <option
-              value={item}
-              key={index}
-            >
-              {item}
-            </option>
-          ))}
-        </select>}
+        {workStatus === "completed" ? (
+          "Completed"
+        ) : (
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            name="status"
+            id="status"
+          >
+            <option value="">set status</option>
+            {statusList.map((item, index) => (
+              <option value={item} key={index}>
+                {item}
+              </option>
+            ))}
+          </select>
+        )}
       </td>
-        <td>
-          {" "}
-          <input
-            disabled={!workStatus && !workBalance}
-            type="number"
-            placeholder="Add advance"
-            value={addNewAdvance}
-            onChange={(e) => setAddNewAdvance(e.target.value)}
-          />
-        </td>
-      <td>{receivedAmountfn(workId)}</td>
+      <td>
+        {" "}
+        <input
+          disabled={!workStatus && !workBalance}
+          type="number"
+          placeholder="Add advance"
+          value={addNewAdvance}
+          onChange={(e) => setAddNewAdvance(e.target.value)}
+        />
+      </td>
+      <td>{advance?.reduce((totalAmount, currentObject) => totalAmount + currentObject.amount, 0)}</td>
       <td>{updatedAt}</td>
       <td>
         {(workStatus || workBalance) && (

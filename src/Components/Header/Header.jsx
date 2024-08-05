@@ -1,9 +1,10 @@
 import React from 'react'
+import "./Header.css"
 
 const Header = () => {
   return (
-    <>
-    <div>VPFW</div>
+    <div className='header'>
+    <div className='logo'>VPFW</div>
     <nav>
         <ul>
             <li><a href="#">Home</a></li>
@@ -11,7 +12,7 @@ const Header = () => {
             <li><a href="#">Works</a></li>
         </ul>
     </nav>
-    </>
+    </div>
   )
 }
 

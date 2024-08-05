@@ -13,6 +13,10 @@ const WorksPage = () => {
   const [unPaidWorks, setUnPaidWorks] = useState(false);
   const [completedWorks, setCompletedWorks] = useState(false);
 
+  const [filteredWorks, setFilteredWorks] = useState(workList);
+  useEffect(() => {
+    setFilteredWorks(workList.filter((work) => work.status === "pending"));
+  }, []);
   const tableHeaders = [
     "S.No.",
     "Received",
@@ -23,63 +27,57 @@ const WorksPage = () => {
     "Amount Received",
     "Last Updated",
   ];
-  // let worksData = workList;
-  const handleAllWorksFilter = () => {
-    setAllWorks(true);
-    setPendingWorks(false);
-    setUnPaidWorks(false);
-    setCompletedWorks(false);
+  const handleFilter = (status) => {
+    if (status) {
+      const filtered = workList.filter((work) => work.status === status);
+      setFilteredWorks(filtered);
+      if (status === "pending") {
+        setAllWorks(false);
+        setPendingWorks(true);
+        setUnPaidWorks(false);
+        setCompletedWorks(false);
+      } else if (status === "completed") {
+        setAllWorks(false);
+        setPendingWorks(false);
+        setUnPaidWorks(false);
+        setCompletedWorks(true);
+      } else if (status === "balance pending") {
+        setAllWorks(false);
+        setPendingWorks(false);
+        setUnPaidWorks(true);
+        setCompletedWorks(false);
+      }
+    } else {
+      setFilteredWorks(workList);
+      setAllWorks(true);
+      setPendingWorks(false);
+      setUnPaidWorks(false);
+      setCompletedWorks(false);
+    }
   };
-  const handlePendingFilter = () => {
-    setAllWorks(false);
-    setPendingWorks(true);
-    setUnPaidWorks(false);
-    setCompletedWorks(false);
-  };
-  const handleUnPaidFilter = () => {
-    setAllWorks(false);
-    setPendingWorks(false);
-    setUnPaidWorks(true);
-    setCompletedWorks(false);
-  };
-  const handleCompletedFilter = () => {
-    setAllWorks(false);
-    setPendingWorks(false);
-    setUnPaidWorks(false);
-    setCompletedWorks(true);
-  };
-  let worksData;
-  console.log(worksData, "From outsite if");
-  if (allWorks && !pendingWorks && !unPaidWorks && !completedWorks) {
-    worksData = workList;
-    console.log("all works main data: ", worksData);
-  }
-  if (pendingWorks && !allWorks && !unPaidWorks && !completedWorks) {
-    worksData = workList.filter((item) => item.isPending === true);
-    // tableHeaders.splice(tableHeaders.indexOf("Status"), 1)
-  }
-  if (unPaidWorks && !pendingWorks && !allWorks && !completedWorks) {
-    worksData = workList.filter(
-      (item) => item.balancePending === true && item.isPending === false
-    );
-  }
-  if (completedWorks && !pendingWorks && !unPaidWorks && !allWorks) {
-    worksData = workList.filter((item) => item.isPending === false && item.balancePending === false);
-  }
 
-  const NumberOfPendingWorks = workList.filter((item) => item.isPending === true)
-  const NumberOfCompletedWorks = workList.filter((item) => item.isPending === false && item.balancePending === false)
+  const NumberOfPendingWorks = workList.filter(
+    (item) => item.isPending === true
+  );
+  const NumberOfCompletedWorks = workList.filter(
+    (item) => item.isPending === false && item.balancePending === false
+  );
 
   const paymentReceivables = () => {
-    const paymentPendingWorks = workList.filter((item) => item.isPending === false && item.balancePending === true)
+    const paymentPendingWorks = workList.filter(
+      (item) => item.isPending === false && item.balancePending === true
+    );
 
     const balanceAmounts = paymentPendingWorks.map((transaction) => {
       return transaction.final_amt - transaction.received_amt;
-    })
+    });
 
-    const totalPendingAmount = balanceAmounts.reduce((sum, balance) => sum + balance, 0)
-    return totalPendingAmount
-  }
+    const totalPendingAmount = balanceAmounts.reduce(
+      (sum, balance) => sum + balance,
+      0
+    );
+    return totalPendingAmount;
+  };
   const handleAddWorkBtn = () => {
     setShowWorkForm(!showWorkForm);
   };
@@ -95,35 +93,41 @@ const WorksPage = () => {
         <button onClick={handleAddWorkBtn}>Add Work</button>
       </div>
       <div className="middle">
-        <WorksCard worksNumbers={NumberOfPendingWorks.length}/>
-        <WorksCard worksHeading="Completed Works" worksNumbers={NumberOfCompletedWorks.length} />
+        <WorksCard worksNumbers={NumberOfPendingWorks.length} />
+        <WorksCard
+          worksHeading="Completed Works"
+          worksNumbers={NumberOfCompletedWorks.length}
+        />
         <WorksCard worksHeading="All Works" worksNumbers={workList.length} />
-        <WorksCard worksHeading="Payment Receivables" worksNumbers={paymentReceivables()} />
+        <WorksCard
+          worksHeading="Payment Receivables"
+          worksNumbers={paymentReceivables()}
+        />
       </div>
       <div className="bottom">
         <div className="work_filters">
           <div className="worksFilter_left workFilterItem">
             <span
               className={allWorks ? `active` : ""}
-              onClick={handleAllWorksFilter}
+              onClick={() => handleFilter("")}
             >
               All Works
             </span>
             <span
               className={pendingWorks ? `active` : ""}
-              onClick={handlePendingFilter}
+              onClick={() => handleFilter("pending")}
             >
               Pending
             </span>
             <span
               className={unPaidWorks ? `active` : ""}
-              onClick={handleUnPaidFilter}
+              onClick={() => handleFilter("balance pending")}
             >
               Unpaid
             </span>
             <span
               className={completedWorks ? `active` : ""}
-              onClick={handleCompletedFilter}
+              onClick={() => handleFilter("completed")}
             >
               Completed
             </span>
@@ -142,7 +146,7 @@ const WorksPage = () => {
               </tr>
             </thead>
             <tbody>
-              {worksData?.reverse().map((item, index) => (
+              {filteredWorks?.reverse().map((item, index) => (
                 <WorkRow
                   key={index}
                   index={index}
@@ -153,7 +157,8 @@ const WorksPage = () => {
                   updatedAt={item.updatedAt}
                   workId={item.id}
                   workBalance={item.balancePending}
-                  workStatus={item.isPending}
+                  workStatus={item.status}
+                  advance={item.advance}
                 />
               ))}
             </tbody>

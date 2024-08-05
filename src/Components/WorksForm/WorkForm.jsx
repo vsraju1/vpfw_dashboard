@@ -41,6 +41,7 @@ const WorkForm = ({setShowWorksForm, worksForm}) => {
       delivered: false, // Default status
       isFitted: false, // Default status
       balancePending: true, // Default status
+      status: "pending",
       updatedAt: settingDateFormat(date), // Initial update date
     };
     // const totalIncomeAmount = filteredIncomeData?.reduce(

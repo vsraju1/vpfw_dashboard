@@ -14,3 +14,10 @@ html, body{
 body{
   padding: 10px;
 }
+ul li{
+  list-style: none;
+}
+a{
+  text-decoration: none;
+  color: gray;
+}
