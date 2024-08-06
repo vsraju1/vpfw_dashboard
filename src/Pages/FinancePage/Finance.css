@@ -1,6 +1,6 @@
 *{
     padding: 0;
-    margin: 0;  
+    margin: 0;
 }
 .finance{
     display: flex;
@@ -10,6 +10,9 @@
     height: fit-content;
     min-height: 15vh;
     gap: 20px;
+    margin: auto;
+    margin-top: 60px;
+    flex-direction: column;
 }
 form{
     display: flex;

@@ -4,6 +4,7 @@ import { getDatabase, ref, set, push } from "firebase/database";
 import "./Finance.css";
 import FinanceContext from "../../Context/FinanceContext";
 
+
 const typeData = [
   {
     type: "expense",

@@ -9,8 +9,11 @@
     border-top: 2px solid #dddddd;
     overflow: hidden !important;
 }
-.transactions .transaction_total{
-    width: fit-content;
+
+.transaction_total{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
 }
 .transaction_total .total{
     display: flex;
@@ -23,6 +26,46 @@
 .transactions h2{
     font-size: 2rem;
 }
+.transaction_total .transaction_button{
+    display: flex;
+    gap: 10px;
+}
+.transaction_total .transaction_DownloadBtn button,select{
+    border-radius: 2px;
+    border: none;
+    padding: 0;
+    display: none;
+}
+.transaction_total .transaction_DownloadBtn select{
+    padding: 5px;
+    margin-bottom: 5px;
+    color: black;
+    box-shadow: 0px 0px 5px lightgray;
+    font-size: 0.9rem;
+}
+
+.transaction_total .transaction_button button{
+    background-color: transparent;
+    color: black;
+    font-size: 0.9rem;
+    padding: 5px 15px;
+    cursor: pointer;
+    border-radius: 2px;
+    border: none;
+    box-shadow: 0px 0px 5px lightgray;
+    /* transition: all 0.2s ease; */
+}
+.transaction_total button:disabled{
+    color: gray;
+}
+.transaction_total button:active{
+    transform: translateY(1px);
+}
+.transaction_total .transaction_page{
+    font-size: 0.9rem;
+    color: gray;
+}
+
 /* table{
     width: 100%;
     border: 1px solid black;
@@ -38,11 +81,11 @@
 
 .transaction_table{
     border-collapse: collapse;
-    margin: 25px 0;
+    /* margin: 25px 0; */
     font-size: 1rem;
     width: 100%;
     border-radius: 5px;
-    background-color: aqua;
+    /* background-color: aqua; */
     /* overflow: hidden; */
 }
 
