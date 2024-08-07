@@ -69,3 +69,18 @@
                              ;
     }
 }
+
+.graph{
+    margin-top: 70px;
+    /* background-color: red; */
+    width: 100%;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.graph .graph_item{
+    flex: 1;
+    border: 2px solid lightgray;
+    border-radius: 2px;
+}

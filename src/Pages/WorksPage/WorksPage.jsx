@@ -57,7 +57,7 @@ const WorksPage = () => {
   };
 
   const NumberOfPendingWorks = workList.filter(
-    (item) => item.isPending === true
+    (item) => item.status === "pending"
   );
   const NumberOfCompletedWorks = workList.filter(
     (item) => item.isPending === false && item.balancePending === false
