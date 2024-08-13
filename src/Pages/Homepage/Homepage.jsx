@@ -79,7 +79,8 @@ const Homepage = () => {
               BALANCE: <span>$5,00,000</span>
             </div>
           </div>
-          <div className="graph_details right"></div>
+          <div className="graph_details right">
+          </div>
         </div>
         <div className="botton_graph graph_item">
           <div className="graph_details left"></div>
