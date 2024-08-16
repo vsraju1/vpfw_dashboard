@@ -35,10 +35,10 @@ function App() {
     <FinanceContext.Provider value={{ finance, setFinance }}>
       <WorksContext.Provider value={{ workList, setWorkList }}>
         <Homepage />
-        <Finance />
-        <FinanceDetails />
-        <TransactonsPage />
-        <WorksPage />
+        {/* <Finance /> */}
+        {/* <FinanceDetails /> */}
+        {/* <TransactonsPage /> */}
+        {/* <WorksPage /> */}
       </WorksContext.Provider>
     </FinanceContext.Provider>
   );
