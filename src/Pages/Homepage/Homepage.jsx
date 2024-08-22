@@ -60,7 +60,7 @@ const Homepage = () => {
   return (
     <>
       <Header />
-      <BarChart
+      {/* <BarChart
         width={500}
         height={300}
         data={summarizedBarData.reverse()}
@@ -86,7 +86,7 @@ const Homepage = () => {
           fill="red"
           activeBar={<Rectangle fill="gold" stroke="purple" />}
         />
-      </BarChart>
+      </BarChart> */}
     </>
   );
 };
