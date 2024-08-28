@@ -41,7 +41,7 @@ const WorkRow = ({
                 isFitted: true,
                 isPending: false,
                 status: "completed",
-                advance:[...work.advance, newAdvance],
+                advance: [...work.advance, newAdvance],
                 updatedAt: settingDateFormat(date),
               };
             } else if (status === "Balance Pending") {
@@ -92,7 +92,7 @@ const WorkRow = ({
         }
         return work;
       });
-      setWorkList(updatedWorks)
+      setWorkList(updatedWorks);
     }
     setAddNewAdvance(0);
     setStatus("");
@@ -105,9 +105,7 @@ const WorkRow = ({
       <td>{workName}</td>
       <td>{customerName}</td>
       <td>
-        {workStatus === "completed" ? (
-          "Completed"
-        ) : (
+        {/* {workStatus === "pending" ? (
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
@@ -115,13 +113,27 @@ const WorkRow = ({
             id="status"
           >
             <option value="">set status</option>
-            {statusList.map((item, index) => (
-              <option value={item} key={index}>
-                {item}
-              </option>
-            ))}
+            {statusList.map((item, index) => {
+              return (
+                <option value={item} key={index}>
+                  {item}
+                </option>
+              );
+            })}
           </select>
-        )}
+        ) : (
+          "Completed"
+        )} */}
+        {/* {workStatus === "completed" && "Completed"}
+        {workStatus === "pending" && <select></select>} */}
+        <label>
+          <select value={status} onChange={(e) => e.target.value} name="status" id="status">
+            <option value="opt1">opt1</option>
+            <option value="opt1">opt2</option>
+            <option value="opt1">opt3</option>
+            <option value="opt1">opt4</option>
+          </select>
+        </label>
       </td>
       <td>
         {" "}
@@ -133,7 +145,12 @@ const WorkRow = ({
           onChange={(e) => setAddNewAdvance(e.target.value)}
         />
       </td>
-      <td>{advance?.reduce((totalAmount, currentObject) => totalAmount + currentObject.amount, 0)}</td>
+      <td>
+        {advance?.reduce(
+          (totalAmount, currentObject) => totalAmount + currentObject.amount,
+          0
+        )}
+      </td>
       <td>{updatedAt}</td>
       <td>
         {(workStatus || workBalance) && (

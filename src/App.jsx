@@ -13,6 +13,7 @@ import WorkForm from "./Components/WorksForm/WorkForm";
 import { worksData } from "./Data/Data";
 import { WorksContext } from "./Context/WorkContext";
 import WorksPage from "./Pages/WorksPage/WorksPage";
+import Practice from "./Pages/PracticePage/Practice";
 
 function App() {
   const [finance, setFinance] = useState(srcData);
@@ -34,7 +35,8 @@ function App() {
   return (
     <FinanceContext.Provider value={{ finance, setFinance }}>
       <WorksContext.Provider value={{ workList, setWorkList }}>
-        <Homepage />
+        <Practice />
+        {/* <Homepage /> */}
         {/* <Finance /> */}
         {/* <FinanceDetails /> */}
         {/* <TransactonsPage /> */}

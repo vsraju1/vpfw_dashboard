@@ -3,6 +3,7 @@
     width: 85%;
     min-height: 100vh;
     margin: auto;
+    margin-top: 52px;
     position: relative;
     display: flex;
     flex-direction: column;
