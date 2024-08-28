@@ -1,0 +1,41 @@
+.header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    margin: auto;
+    padding: 16px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    box-shadow:0px 0px 5px lightgray;
+    z-index: 999;
+}
+.header .logo{
+    font-size: 2rem;
+    cursor: pointer;
+}
+.header nav ul{
+    display: flex;
+    gap: 20px;
+}
+nav ul li{
+    list-style: none;
+    position: relative;
+    font-size: 0.8rem;
+}
+nav ul li::after{
+    content : "";
+    width: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: gray;
+    height: 1px;
+    transition: width 0.2s ease;
+    transform-origin: bottom right;
+}
+nav ul li:hover::after{
+    width: 100%;
+}

@@ -1,0 +1,153 @@
+.worksPage{
+    /* background-color: lightcyan; */
+    width: 85%;
+    min-height: 100vh;
+    margin: auto;
+    margin-top: 52px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 1;
+}
+
+
+
+/* Top Css */
+.worksPage .top{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+}
+.worksPage .top h2{
+    font-size: 1.8rem;
+    text-transform: capitalize;
+}
+.worksPage .top button{
+    width: fit-content;
+    font-size: 1rem;
+    padding: 8px 16px;
+    color: black;
+    background-color: #F4C119;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.worksPage .top button:active{
+    transform: translateY(2px);
+}
+/* top css end  */
+
+/* Middle css  */
+.worksPage .middle{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 20px;
+}
+/* Middle css end  */
+
+.worksPage .bottom{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.worksPage .bottom .work_filters{
+    display: flex;
+    padding: 1.6rem 0;
+    padding-bottom: 0;
+    justify-content: space-between;
+    align-items: center;
+}
+.work_filters .worksFilter_left span{
+    margin-right: 1.8rem;
+    font-size: 0.9rem;
+    color: gray;
+    font-weight: 400;
+    position: relative;
+    cursor: pointer;
+}
+.work_filters .worksFilter_left span::after{
+    content: "";
+    width: 100%;
+    transform: scale(0);
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    background-color: gray;
+    transform-origin: right;
+    transition: transform 0.5s ease;
+}
+.work_filters .worksFilter_left span:hover::after{
+    transform: scale(1);
+    transform-origin:left;
+}
+.work_filters .worksFilter_left span.active{
+    font-weight: 600;
+    color: #03346E;
+}
+.work_filters .worksFilter_left span.active::after{
+    background-color: #03346E;
+}
+.worksPage .bottom .work_filters input{
+    border-radius: 5px;
+    font-size: 1rem;
+    border: none;
+    padding: 5px;
+}
+.worksPage table{
+    margin: auto;
+    width: 100%;
+    border-top: 2px solid black;
+    border-collapse: collapse;
+    font-size: 1rem;
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.worksPage .works_table thead tr{
+    /* background-color: rgb(236, 196, 15); */
+    font-size: 0.9rem;
+    font-weight: lighter !important;
+    color: gray;
+    text-transform: capitalize;
+}
+.worksPage .works_table th, td{
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.worksPage table tr td{
+    padding: 6px;
+    font-size: 0.8rem;
+}
+.worksPage table tbody select, input{
+    padding: 4px;
+    border-radius: 5px;
+    border: none;
+    background-color: #e5e5e5;
+}
+.worksPage table tbody button{
+    color: black;
+    background-color: #F4C119;
+    border-radius: 5px;
+}
+.worksPage table tbody button:active{
+    transform: scale(0.99);
+}
+
+.worksPage .works_table tbody tr{
+    background-color: white;
+}
+
+.worksPage .works_table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3;
+}
+.worksPage .works_table tbody tr:last-of-type{
+    border-bottom: 2px solid rgb(236, 196, 15);
+}

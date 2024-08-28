@@ -1,0 +1,18 @@
+.worksCard{
+    background-color: white;
+    min-width: 180px;
+    width: fit-content;
+    padding: 14px;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 0px 0px 5px lightgray;
+}
+.worksCard h4{
+    text-transform: capitalize;
+    margin-bottom: 10px;
+    color: gray;
+}
+.worksCard p{
+    text-align: left;
+    font-weight: 600;
+}
